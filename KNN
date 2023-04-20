@@ -1,0 +1,32 @@
+import numpy as np
+import pandas as pd
+iris_data=pd.read_csv('SENSING.csv')
+feature_colums=['HKUST-1','Cu(BDC)','Cu(BPDC)','Cu2(BDC)2(dabco)]
+X=iris_data[feature_colums].values
+y=iris_data['Type'].values  
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
+y=le.fit_transform(y) 
+from sklearn.model_selection import train_test_split
+X_train, X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=0)
+print(X.shape,y.shape)
+print(X_train.shape, y_train.shape)
+print(X_test.shape, y_test.shape)
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix,ConfusionMatrixDisplay,accuracy_score
+from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+classifier=KNeighborsClassifier(n_neighbors=3)
+clf=classifier.fit(X_train, y_train)
+y_pred=clf.predict(X_test)
+cm=confusion_matrix(y_true=y_test,y_pred=y_pred,labels=None,normalize='true')
+print(y_test,y_test.shape)
+print(y_pred,y_pred.shape)
+print(cm)
+print( clf.score(X_test, y_test) )
+disp=ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot()
+plt.show()
+print(y)
+accuracy=accuracy_score(y_test,y_pred)*100
+print('accuracy='+str(round(accuracy,2))+'%')
